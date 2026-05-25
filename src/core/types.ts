@@ -3,6 +3,9 @@ export interface WordSuggestion {
   frequency?: number;
 }
 
+// Re-export DictEntry so consumers only need to import from one place
+export type { DictEntry } from '../data/core';
+
 export interface ConvertResult {
   sinhala: string;
   currentWordPhonetic: string;

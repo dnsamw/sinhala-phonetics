@@ -28,6 +28,16 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./dict-core": {
+      "types": "./dist/dict-core.d.ts",
+      "import": "./dist/dict-core.mjs",
+      "require": "./dist/dict-core.js"
+    },
+    "./dict-social": {
+      "types": "./dist/dict-social.d.ts",
+      "import": "./dist/dict-social.mjs",
+      "require": "./dist/dict-social.js"
     }
   },
   "files": [

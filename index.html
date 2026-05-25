@@ -568,6 +568,189 @@
       footer { padding: 32px 20px; flex-direction: column; }
       section { padding: 64px 20px; }
     }
+
+    /* ─── LIVE DEMO ───────────────────────────────────────── */
+    #demo { border-top: 1px solid var(--gray-800); }
+    .demo-card {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .demo-top-line {
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      pointer-events: none;
+    }
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--gray-800);
+    }
+    .demo-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .demo-live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--white);
+      animation: livePulse 2.4s ease-in-out infinite;
+    }
+    @keyframes livePulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.25; transform: scale(0.85); }
+    }
+    .demo-live-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+    }
+    .demo-clear-btn {
+      background: transparent;
+      border: 1px solid var(--gray-700);
+      color: var(--gray-500);
+      padding: 5px 14px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font);
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .demo-clear-btn:hover { border-color: var(--gray-500); color: var(--gray-300); }
+    .demo-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 170px;
+    }
+    @media (max-width: 640px) {
+      .demo-body { grid-template-columns: 1fr; }
+      .demo-input-pane { border-right: none !important; border-bottom: 1px solid var(--gray-800); }
+    }
+    .demo-pane { padding: 26px 28px; }
+    .demo-pane-label {
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 14px;
+    }
+    .demo-input-pane { border-right: 1px solid var(--gray-800); }
+    .demo-phonetic-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--mono);
+      font-size: 0.98rem;
+      color: var(--white);
+      resize: none;
+      caret-color: var(--white);
+      line-height: 1.65;
+      height: 88px;
+    }
+    .demo-phonetic-input::placeholder { color: var(--gray-700); }
+    .demo-output-text {
+      font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+      color: var(--white);
+      font-weight: 300;
+      line-height: 1.45;
+      min-height: 88px;
+      word-break: break-word;
+      letter-spacing: 0.01em;
+    }
+    .demo-output-empty {
+      color: var(--gray-700);
+      font-size: 1rem;
+      font-weight: 300;
+    }
+    .demo-predictions-row {
+      border-top: 1px solid var(--gray-800);
+      padding: 12px 20px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .demo-pred-tag {
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+    .pred-chip {
+      background: var(--gray-800);
+      border: 1px solid var(--gray-700);
+      border-radius: 100px;
+      padding: 5px 15px;
+      font-size: 0.98rem;
+      color: var(--white);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      animation: chipIn 0.18s ease both;
+    }
+    @keyframes chipIn {
+      from { opacity: 0; transform: translateY(5px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .pred-chip:hover {
+      background: var(--gray-700);
+      border-color: var(--gray-400);
+      transform: translateY(-2px);
+    }
+    .demo-examples-row {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .demo-eg-label {
+      font-size: 0.72rem;
+      color: var(--gray-600);
+      font-weight: 500;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+    }
+    .demo-eg-btn {
+      background: transparent;
+      border: 1px solid var(--gray-800);
+      border-radius: 8px;
+      padding: 7px 15px;
+      font-size: 0.78rem;
+      color: var(--gray-400);
+      cursor: pointer;
+      font-family: var(--mono);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .demo-eg-btn:hover {
+      border-color: var(--gray-600);
+      color: var(--white);
+      background: var(--gray-900);
+    }
+    .demo-eg-btn em {
+      font-style: normal;
+      color: var(--gray-600);
+      margin-left: 6px;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
@@ -578,6 +761,7 @@
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#phonetics">Phonetics</a></li>
+    <li><a href="#demo">Demo</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#api">API</a></li>
     <li><a href="https://github.com/dnsamw/sinhala-phonetics" target="_blank">GitHub</a></li>
@@ -679,6 +863,61 @@
     <div class="phonetic-cell"><span class="ph-latin">sh / Sh</span><span class="ph-sinhala">ශ / ෂ</span></div>
     <div class="phonetic-cell"><span class="ph-latin">th / Th</span><span class="ph-sinhala">ත / ථ</span></div>
     <div class="phonetic-cell"><span class="ph-latin">GN</span><span class="ph-sinhala">ඥ</span></div>
+  </div>
+</section>
+
+<!-- LIVE DEMO -->
+<section id="demo">
+  <div class="section-label">Interactive demo</div>
+  <h2>Try it right here.</h2>
+  <p class="section-desc">Type any Sinhala phonetics in the left pane and watch the Unicode appear live in the right pane. Click a suggestion chip to accept a word prediction.</p>
+
+  <div class="demo-card">
+    <div class="demo-top-line"></div>
+
+    <div class="demo-header">
+      <div class="demo-header-left">
+        <div class="demo-live-dot"></div>
+        <span class="demo-live-label">Live · Real-time conversion</span>
+      </div>
+      <button class="demo-clear-btn" onclick="demoReset()">Clear</button>
+    </div>
+
+    <div class="demo-body">
+      <div class="demo-pane demo-input-pane">
+        <div class="demo-pane-label">Phonetic Input</div>
+        <textarea
+          id="demoInput"
+          class="demo-phonetic-input"
+          placeholder="Type here…&#10;e.g. ayubowan"
+          spellcheck="false"
+          autocorrect="off"
+          autocomplete="off"
+          autocapitalize="off"
+        ></textarea>
+      </div>
+      <div class="demo-pane">
+        <div class="demo-pane-label">Sinhala Unicode Output</div>
+        <div id="demoOutput" class="demo-output-text">
+          <span class="demo-output-empty">ඔබේ සිංහල මෙහි දිස්වේ…</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-predictions-row" id="demoPredictions">
+      <span class="demo-pred-tag">Suggestions</span>
+      <span style="color:var(--gray-700);font-size:0.8rem;">— type a word to see predictions</span>
+    </div>
+  </div>
+
+  <div class="demo-examples-row">
+    <span class="demo-eg-label">Try an example:</span>
+    <button class="demo-eg-btn" onclick="demoType('ayubowan')">ayubowan <em>→ ආයුබෝවන්</em></button>
+    <button class="demo-eg-btn" onclick="demoType('mama amma thaaththa')">mama amma thaaththa <em>→ family</em></button>
+    <button class="demo-eg-btn" onclick="demoType('kohomada')">kohomada <em>→ කොහොමද</em></button>
+    <button class="demo-eg-btn" onclick="demoType('sri lankawa')">sri lankawa <em>→ ශ්‍රී ලංකාව</em></button>
+    <button class="demo-eg-btn" onclick="demoType('aadare')">aadare <em>→ ආදරේ</em></button>
+    <button class="demo-eg-btn" onclick="demoType('subha aluth awuruddak wewa')">subha aluth awuruddak wewa <em>→ Happy New Year</em></button>
   </div>
 </section>
 
@@ -886,6 +1125,7 @@ content: [
 </footer>
 
 <script>
+  /* ── NAV HELPERS ─────────────────────────────────── */
   function copyInstall(el) {
     navigator.clipboard.writeText('npm install @dnsam/sinhala-phonetics').then(() => {
       const btn = el.querySelector('.copy-btn');
@@ -894,13 +1134,189 @@ content: [
       setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
     });
   }
-
   function showTab(name, btn) {
     document.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.code-tab').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     btn.classList.add('active');
   }
+
+  /* ── SINHALA CONVERTER (vanilla JS port) ────────── */
+  const _VM = [
+    ['oo','ඌ','ූ'],['o\\)','ඕ','ෝ'],['oe','ඕ','ෝ'],
+    ['aa','ආ','ා'],['a\\)','ආ','ා'],['Aa','ඈ','ෑ'],
+    ['A\\)','ඈ','ෑ'],['ae','ඈ','ෑ'],['ii','ඊ','ී'],
+    ['i\\)','ඊ','ී'],['ie','ඊ','ී'],['ee','ඊ','ී'],
+    ['ea','ඒ','ේ'],['e\\)','ඒ','ේ'],['ei','ඒ','ේ'],
+    ['uu','ඌ','ූ'],['u\\)','ඌ','ූ'],['au','ඖ','ෞ'],
+    ['/\\a','ඇ','ැ'],['a','අ',''],['A','ඇ','ැ'],
+    ['i','ඉ','ි'],['e','එ','ෙ'],['u','උ','ු'],
+    ['o','ඔ','ො'],['I','ඓ','ෛ'],
+  ];
+  const _CM = [
+    ['nndh','ඳ'],['nnd','ඬ'],['nng','ඟ'],
+    ['Th','ථ'],['Dh','ධ'],['gh','ඝ'],['Ch','ඡ'],
+    ['ph','ඵ'],['bh','භ'],['sh','ශ'],['Sh','ෂ'],
+    ['GN','ඥ'],['KN','ඤ'],['Lu','ළු'],['dh','ද'],
+    ['ch','ච'],['kh','ඛ'],['th','ත'],
+    ['t','ට'],['k','ක'],['d','ඩ'],['n','න'],
+    ['p','ප'],['b','බ'],['m','ම'],
+    ['\\y','‍ය'],['Y','‍ය'],['y','ය'],
+    ['j','ජ'],['l','ල'],['v','ව'],['w','ව'],
+    ['s','ස'],['h','හ'],['N','ණ'],['L','ළ'],
+    ['K','ඛ'],['G','ඝ'],['T','ඨ'],['D','ඪ'],
+    ['P','ඵ'],['B','ඹ'],['f','ෆ'],['q','ඣ'],
+    ['g','ග'],['r','ර'],
+  ];
+  const _SC = [
+    [/\\n/g,'ං'],[/\\h/g,'ඃ'],[/\\N/g,'ඞ'],[/\\R/g,'ඍ'],
+    [/R/g,'ර්‍'],[/\\r/g,'ර්‍'],
+  ];
+  const _SP = [['ruu','ෲ'],['ru','ෘ']];
+
+  function demoConvert(input) {
+    let t = input;
+    for (const [p,u] of _SC) t = t.replace(p, u);
+    for (const [sc,su] of _SP)
+      for (const [c,cu] of _CM)
+        t = t.replace(new RegExp(c + sc, 'g'), cu + su);
+    for (const [c,cu] of _CM) {
+      for (const [v,,m] of _VM)
+        t = t.replace(new RegExp(c + 'r' + v, 'g'), cu + '්‍ර' + m);
+      t = t.replace(new RegExp(c + 'r', 'g'), cu + '්‍ර');
+    }
+    for (const [c,cu] of _CM)
+      for (const [v,,m] of _VM)
+        t = t.replace(new RegExp(c + v, 'g'), cu + m);
+    for (const [c,cu] of _CM)
+      t = t.replace(new RegExp(c, 'g'), cu + '්');
+    for (const [v,u] of _VM)
+      t = t.replace(new RegExp(v, 'g'), u);
+    return t;
+  }
+
+  /* ── WORD DICTIONARY (for demo predictions) ──────── */
+  const _WORDS = [
+    'අම්මා','අක්කා','අයියා','අද','අපි','අත','අනේ','අනිත්',
+    'ආදරය','ආදරේ','ආයුබෝවන්','ආකාශය','ආහාරය','ආරක්ෂාව',
+    'ඇස','ඇඟ','ඇවිද්දා','ඇත්ත',
+    'ඉගෙනගන්නවා','ඉස්කෝලය','ඉඩම',
+    'ඊයේ','එනවා','එය',
+    'ඔව්','ඔබ','ඔහු','ඔවුන්',
+    'කෑම','කෑවා','කාලය','කාමරය','කෝපි','කන','කරනවා','කොහොමද','කතා කරනවා','කිව්වා',
+    'ගෙදර','ගෙනාවා','ගෙල','ගෙඩිය','ගම','ගල','ගස','ගත්තා','ගංගාව','ගෙදරට','ගෑනී',
+    'ජීවිතය','ජලය','ජනතාව',
+    'තාත්තා','තේ','තරු','තිහක්',
+    'දරුවා','දිව්වා','දෙනවා','දෙනු','දවස','දත','දුක','දැනුම',
+    'නිවස','නගරය','නාසය','නිදනවා','නිදාගත්තා','නම','නිසා',
+    'පාසල','පවුල','පළතුරු','පය','පපුව',
+    'බල්ලා','බිව්වා','බලනවා','බොනවා','බදාදා','බ්‍රහස්පතින්දා',
+    'මම','මිතුරා','මිනිසා','මල','මස','මාළු','මාසය','මෙය',
+    'යනවා','ලොකු','ලෝකය','ලියනවා','ළමයා','ළමුන්','ළිඳ',
+    'වතුර','වර්ෂාව','වළාකුළ',
+    'සිංහල','සතුට','සාගරය','ශ්‍රී ලංකාව','සූර්යයා','සදුදා','සෞඛ්‍යය',
+    'හොඳ','හොඳයි','හදවත','හිස','හිටියා','හෙදිය',
+    'රට','රාත්‍රිය','රෝහල','රථය',
+    'ළඟ','දුරකතනය','පරිගණකය','අන්තර්ජාලය',
+    'ශ්‍රද්ධාව','විශ්වාසය','බලාපොරොත්තුව','නිදහස','සාමය','ජය',
+    'ගෙදරේ','ගෙදරින්',
+    'ඇඩුවා','ඇසුවා',
+    'රතු','නිල්','කොළ','කහ','සුදු','කළු',
+    'සිකුරාදා','සෙනසුරාදා','ඉරිදා','අඟහරුවාදා',
+    'ජනවාරි','පෙබරවාරි','මාර්තු','අප්‍රේල්','මැයි',
+    'ජූනි','ජූලි','අගෝස්තු','සැප්තැම්බර්','ඔක්තෝබර්','නොවැම්බර්','දෙසැම්බර්',
+    'සුභ','සුභ අලුත් අවුරුද්දක් වේවා',
+    'ස්තුතියි','බොහෝ','ටිකක්',
+    'ගොඩනැගිල්ල','ගොවිපල',
+  ];
+
+  function _predict(sinhalaPrefix, max) {
+    if (!sinhalaPrefix) return [];
+    const norm = sinhalaPrefix.replace(/්$/, '');
+    if (!norm) return [];
+    const out = [];
+    for (const w of _WORDS) {
+      if (w.startsWith(norm) && w !== norm) {
+        out.push(w);
+        if (out.length >= max) break;
+      }
+    }
+    return out;
+  }
+
+  /* ── DEMO STATE & INTERACTION ────────────────────── */
+  let _lockedSinhala = '';
+  let _typeTimer = null;
+
+  function _lastWord(str)   { return (str.match(/(\S+)$/) || ['',''])[1]; }
+  function _beforeLast(str) { return str.replace(/\S+$/, ''); }
+
+  function _demoRender() {
+    const inp  = document.getElementById('demoInput');
+    const out  = document.getElementById('demoOutput');
+    const pred = document.getElementById('demoPredictions');
+    if (!inp) return;
+
+    const raw = inp.value;
+    const full = _lockedSinhala + demoConvert(raw);
+
+    out.innerHTML = full.trim()
+      ? full
+      : '<span class="demo-output-empty">ඔබේ සිංහල මෙහි දිස්වේ…</span>';
+
+    const lastPh  = _lastWord(raw);
+    const lastSi  = demoConvert(lastPh).replace(/්$/, '');
+    const chips   = _predict(lastSi, 6);
+
+    if (chips.length > 0) {
+      pred.innerHTML =
+        '<span class="demo-pred-tag">Suggestions</span>' +
+        chips.map(w =>
+          `<button class="pred-chip" onclick="_pickChip(this,'${encodeURIComponent(w)}')">${w}</button>`
+        ).join('');
+    } else {
+      pred.innerHTML =
+        '<span class="demo-pred-tag">Suggestions</span>' +
+        '<span style="color:var(--gray-700);font-size:0.8rem;">— type a word to see predictions</span>';
+    }
+  }
+
+  function _pickChip(btn, encodedWord) {
+    const word = decodeURIComponent(encodedWord);
+    const inp  = document.getElementById('demoInput');
+    const raw  = inp.value;
+    const before = _beforeLast(raw);
+    _lockedSinhala = _lockedSinhala + demoConvert(before) + word + ' ';
+    inp.value = '';
+    inp.focus();
+    _demoRender();
+  }
+
+  function demoReset() {
+    _lockedSinhala = '';
+    const inp = document.getElementById('demoInput');
+    if (inp) inp.value = '';
+    clearInterval(_typeTimer);
+    _demoRender();
+  }
+
+  function demoType(text) {
+    demoReset();
+    const inp = document.getElementById('demoInput');
+    if (!inp) return;
+    inp.focus();
+    let i = 0;
+    _typeTimer = setInterval(() => {
+      inp.value += text[i++];
+      _demoRender();
+      if (i >= text.length) clearInterval(_typeTimer);
+    }, 52);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const inp = document.getElementById('demoInput');
+    if (inp) inp.addEventListener('input', _demoRender);
+  });
 </script>
 </body>
 </html>

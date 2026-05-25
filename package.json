@@ -5,6 +5,14 @@
   "author": "Dileepa Sam",
   "license": "MIT",
   "keywords": ["sinhala", "phonetics", "react", "input", "unicode", "transliteration"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dnsamw/sinhala-phonetics.git"
+  },
+  "homepage": "https://dnsamw.github.io/sinhala-phonetics",
+  "bugs": {
+    "url": "https://github.com/dnsamw/sinhala-phonetics/issues"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

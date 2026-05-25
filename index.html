@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@dnsam/sinhala-phonetics — Type Sinhala phonetically</title>
+  <meta name="description" content="A TypeScript npm package for Sinhala phonetic input with word predictions. Drop-in React components, real-time Unicode conversion, Tailwind CSS support." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #000000;
+      --near-black: #0a0a0a;
+      --gray-950: #0d0d0d;
+      --gray-900: #111111;
+      --gray-800: #1a1a1a;
+      --gray-700: #222222;
+      --gray-600: #333333;
+      --gray-500: #555555;
+      --gray-400: #888888;
+      --gray-300: #aaaaaa;
+      --gray-200: #cccccc;
+      --gray-100: #e8e8e8;
+      --white:   #ffffff;
+      --font: 'Poppins', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-800);
+    }
+    .nav-logo {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      font-family: var(--mono);
+    }
+    .nav-logo span { color: var(--gray-400); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--gray-300);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--white);
+      color: var(--black) !important;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gray-200) !important; }
+
+    /* ─── HERO ────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,255,255,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 30% at 20% 80%, rgba(255,255,255,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gray-900);
+      border: 1px solid var(--gray-700);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--gray-300);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      background: linear-gradient(180deg, #ffffff 0%, #aaaaaa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sinhala {
+      font-size: clamp(1.6rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--gray-400);
+      margin-bottom: 28px;
+      letter-spacing: 0.1em;
+      -webkit-text-fill-color: var(--gray-400);
+    }
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--gray-300);
+      max-width: 540px;
+      margin: 0 auto 48px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 72px;
+    }
+    .btn-primary {
+      background: var(--white);
+      color: var(--black);
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      font-family: var(--font);
+    }
+    .btn-primary:hover { background: var(--gray-100); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid var(--gray-700);
+      transition: border-color 0.2s, transform 0.15s;
+      font-family: var(--font);
+    }
+    .btn-ghost:hover { border-color: var(--gray-400); transform: translateY(-1px); }
+
+    .install-block {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--gray-900);
+      border: 1px solid var(--gray-700);
+      border-radius: 10px;
+      padding: 14px 24px;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--gray-200);
+      cursor: pointer;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+    .install-block:hover { border-color: var(--gray-500); }
+    .install-block .prefix { color: var(--gray-500); }
+    .copy-btn {
+      background: var(--gray-800);
+      border: none;
+      color: var(--gray-400);
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-family: var(--font);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s;
+    }
+    .copy-btn:hover { background: var(--gray-700); color: var(--white); }
+    .copy-btn.copied { background: var(--gray-600); color: var(--white); }
+
+    /* ─── DEMO STRIP ──────────────────────────────────────── */
+    .demo-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px 24px;
+      border-top: 1px solid var(--gray-800);
+      border-bottom: 1px solid var(--gray-800);
+      background: var(--gray-950);
+    }
+    .demo-pair {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+    }
+    .demo-latin {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--gray-400);
+    }
+    .demo-arrow { color: var(--gray-600); font-size: 0.75rem; }
+    .demo-sinhala {
+      font-size: 1.1rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    /* ─── SECTIONS ────────────────────────────────────────── */
+    section {
+      padding: 96px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      color: var(--white);
+    }
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--gray-400);
+      max-width: 520px;
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 56px;
+    }
+
+    /* ─── FEATURES ────────────────────────────────────────── */
+    #features { border-top: 1px solid var(--gray-800); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+      background: var(--gray-800);
+      border: 1px solid var(--gray-800);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .feature-card {
+      background: var(--gray-950);
+      padding: 36px 32px;
+      transition: background 0.2s;
+    }
+    .feature-card:hover { background: var(--gray-900); }
+    .feature-icon {
+      width: 40px; height: 40px;
+      background: var(--gray-800);
+      border: 1px solid var(--gray-700);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+    .feature-card h3 {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+    .feature-card p {
+      font-size: 0.85rem;
+      color: var(--gray-400);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ─── PHONETIC TABLE ──────────────────────────────────── */
+    #phonetics { border-top: 1px solid var(--gray-800); }
+    .phonetics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--gray-800);
+      border: 1px solid var(--gray-800);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .phonetic-cell {
+      background: var(--gray-950);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: background 0.15s;
+    }
+    .phonetic-cell:hover { background: var(--gray-900); }
+    .ph-latin {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--gray-400);
+    }
+    .ph-sinhala {
+      font-size: 1.4rem;
+      color: var(--white);
+    }
+
+    /* ─── CODE ────────────────────────────────────────────── */
+    #usage { border-top: 1px solid var(--gray-800); }
+    .code-tabs {
+      display: flex;
+      gap: 2px;
+      background: var(--gray-800);
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+      border: 1px solid var(--gray-700);
+      border-bottom: none;
+    }
+    .code-tab {
+      padding: 10px 20px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--gray-500);
+      cursor: pointer;
+      font-family: var(--font);
+      letter-spacing: 0.02em;
+      background: transparent;
+      border: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .code-tab.active { color: var(--white); background: var(--gray-700); }
+    .code-tab:hover:not(.active) { color: var(--gray-300); }
+    .code-panel { display: none; }
+    .code-panel.active { display: block; }
+    pre {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-700);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 28px 32px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--gray-200);
+    }
+    .tok-comment { color: var(--gray-600); }
+    .tok-keyword { color: var(--gray-300); font-style: italic; }
+    .tok-string  { color: var(--gray-300); }
+    .tok-fn      { color: var(--white); }
+    .tok-prop    { color: var(--gray-400); }
+    .tok-type    { color: var(--gray-200); }
+    .tok-num     { color: var(--gray-400); }
+
+    /* ─── API ─────────────────────────────────────────────── */
+    #api { border-top: 1px solid var(--gray-800); }
+    .api-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 700px) { .api-grid { grid-template-columns: 1fr; } }
+    .api-card {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .api-card-name {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .api-card-type {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      background: var(--gray-800);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+    .api-card p {
+      font-size: 0.84rem;
+      color: var(--gray-400);
+      line-height: 1.65;
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+    .prop-list { list-style: none; }
+    .prop-list li {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      padding: 7px 0;
+      border-top: 1px solid var(--gray-800);
+      font-size: 0.8rem;
+    }
+    .prop-name {
+      font-family: var(--mono);
+      color: var(--gray-300);
+      min-width: 160px;
+      flex-shrink: 0;
+    }
+    .prop-desc { color: var(--gray-500); font-weight: 300; }
+
+    /* ─── INSTALL SECTION ─────────────────────────────────── */
+    #install {
+      border-top: 1px solid var(--gray-800);
+      text-align: center;
+    }
+    #install .section-desc { margin-left: auto; margin-right: auto; }
+    .install-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      text-align: left;
+      margin-bottom: 40px;
+    }
+    .install-step {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--gray-800);
+      border: 1px solid var(--gray-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gray-400);
+      margin-bottom: 16px;
+    }
+    .install-step h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .install-step pre {
+      font-size: 0.78rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-700);
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--gray-800);
+      padding: 48px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      max-width: 100%;
+    }
+    .footer-left p {
+      font-size: 0.82rem;
+      color: var(--gray-500);
+      font-weight: 300;
+    }
+    .footer-left p a {
+      color: var(--gray-400);
+      text-decoration: none;
+    }
+    .footer-left p a:hover { color: var(--white); }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ─── DIVIDER ─────────────────────────────────────────── */
+    .divider-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gray-700), transparent);
+      margin: 0 48px;
+    }
+
+    /* ─── MISC ────────────────────────────────────────────── */
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #777777 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    code {
+      font-family: var(--mono);
+      font-size: 0.82em;
+      background: var(--gray-800);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--gray-200);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      footer { padding: 32px 20px; flex-direction: column; }
+      section { padding: 64px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>@dnsam/</span>sinhala-phonetics</div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#phonetics">Phonetics</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#api">API</a></li>
+    <li><a href="https://github.com/dnsamw/sinhala-phonetics" target="_blank">GitHub</a></li>
+    <li><a href="https://www.npmjs.com/package/@dnsam/sinhala-phonetics" target="_blank" class="nav-cta">npm</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    TypeScript · React · Tailwind
+  </div>
+  <h1>Type Sinhala.<br/>Phonetically.</h1>
+  <div class="hero-sinhala">ආයුබෝවන් &nbsp;·&nbsp; සිංහල &nbsp;·&nbsp; ශ්‍රී ලංකාව</div>
+  <p>An npm package for Sinhala phonetic input — drop-in React components with real-time Unicode conversion and word prediction.</p>
+  <div class="hero-actions">
+    <a href="#usage" class="btn-primary">Get Started</a>
+    <a href="https://github.com/dnsamw/sinhala-phonetics" target="_blank" class="btn-ghost">View on GitHub</a>
+  </div>
+  <div class="install-block" onclick="copyInstall(this)">
+    <span class="prefix">$</span>
+    <span>npm install @dnsam/sinhala-phonetics</span>
+    <button class="copy-btn" tabindex="-1">Copy</button>
+  </div>
+</section>
+
+<!-- DEMO STRIP -->
+<div class="demo-strip">
+  <div class="demo-pair"><span class="demo-latin">ayubowan</span><span class="demo-arrow">→</span><span class="demo-sinhala">ආයුබෝවන්</span></div>
+  <div class="demo-pair"><span class="demo-latin">mama</span><span class="demo-arrow">→</span><span class="demo-sinhala">මම</span></div>
+  <div class="demo-pair"><span class="demo-latin">amma</span><span class="demo-arrow">→</span><span class="demo-sinhala">අම්මා</span></div>
+  <div class="demo-pair"><span class="demo-latin">kohomada</span><span class="demo-arrow">→</span><span class="demo-sinhala">කොහොමද</span></div>
+  <div class="demo-pair"><span class="demo-latin">aadare</span><span class="demo-arrow">→</span><span class="demo-sinhala">ආදරේ</span></div>
+  <div class="demo-pair"><span class="demo-latin">rata</span><span class="demo-arrow">→</span><span class="demo-sinhala">රට</span></div>
+  <div class="demo-pair"><span class="demo-latin">sinhala</span><span class="demo-arrow">→</span><span class="demo-sinhala">සිංහල</span></div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">Why use this</div>
+  <h2>Everything you need<br/>for Sinhala input.</h2>
+  <p class="section-desc">Built for developers building Sinhala-language products — from simple text fields to full editors.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Real-time conversion</h3>
+      <p>As you type phonetically, each keystroke is converted to Sinhala Unicode instantly — no submit, no button, no delay.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💡</div>
+      <h3>Word prediction</h3>
+      <p>A built-in dictionary of ~350 common Sinhala words powers prefix-based suggestions. Select one to replace the current word.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <h3>Tailwind CSS styled</h3>
+      <p>Default styles work out of the box. Override any element with <code>className</code> props, or pass <code>unstyled</code> for full control.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔩</div>
+      <h3>Headless core</h3>
+      <p>Use <code>convertText()</code> and <code>SinhalaPredictor</code> anywhere — Node.js, Deno, Svelte, Vue. No React required for the core.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📦</div>
+      <h3>Dual ESM + CJS</h3>
+      <p>Tree-shakeable ESM and CommonJS builds. Full TypeScript declarations. Works with Vite, Next.js, Webpack, and Rollup.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔌</div>
+      <h3>Extensible dictionary</h3>
+      <p>Bring your own word list using <code>new SinhalaPredictor(myWords)</code> or extend the built-in one with <code>predictor.addWords()</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PHONETICS REFERENCE -->
+<section id="phonetics">
+  <div class="section-label">Phonetic reference</div>
+  <h2>Type this. Get that.</h2>
+  <p class="section-desc">Common phonetic patterns — the same scheme used by Sinhala Google Input Tools.</p>
+  <div class="phonetics-grid">
+    <div class="phonetic-cell"><span class="ph-latin">ayubowan</span><span class="ph-sinhala">ආයුබෝවන්</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">mama</span><span class="ph-sinhala">මම</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">amma</span><span class="ph-sinhala">අම්මා</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">thaththa</span><span class="ph-sinhala">තාත්තා</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">kohomada</span><span class="ph-sinhala">කොහොමද</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">aadare</span><span class="ph-sinhala">ආදරේ</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">sinhala</span><span class="ph-sinhala">සිංහල</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">rata</span><span class="ph-sinhala">රට</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">gama</span><span class="ph-sinhala">ගම</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">gedara</span><span class="ph-sinhala">ගෙදර</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">isthuthi</span><span class="ph-sinhala">ඉස්තූති</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">kramaya</span><span class="ph-sinhala">ක්‍රමය</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">aa</span><span class="ph-sinhala">ආ</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">ii</span><span class="ph-sinhala">ඊ</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">uu</span><span class="ph-sinhala">ඌ</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">sh / Sh</span><span class="ph-sinhala">ශ / ෂ</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">th / Th</span><span class="ph-sinhala">ත / ථ</span></div>
+    <div class="phonetic-cell"><span class="ph-latin">GN</span><span class="ph-sinhala">ඥ</span></div>
+  </div>
+</section>
+
+<!-- USAGE -->
+<section id="usage">
+  <div class="section-label">Quick start</div>
+  <h2>Start typing in<br/>three lines of code.</h2>
+  <p class="section-desc">The <code>&lt;SinhalaTypewriter&gt;</code> component handles everything — conversion, state, and the suggestion dropdown.</p>
+
+  <div class="code-tabs">
+    <button class="code-tab active" onclick="showTab('basic', this)">Basic</button>
+    <button class="code-tab" onclick="showTab('controlled', this)">Controlled</button>
+    <button class="code-tab" onclick="showTab('headless', this)">Headless / Custom</button>
+    <button class="code-tab" onclick="showTab('core', this)">Core only</button>
+  </div>
+
+  <div id="tab-basic" class="code-panel active">
+<pre><span class="tok-keyword">import</span> { SinhalaTypewriter } <span class="tok-keyword">from</span> <span class="tok-string">'@dnsam/sinhala-phonetics'</span>;
+
+<span class="tok-keyword">export default function</span> <span class="tok-fn">App</span>() {
+  <span class="tok-keyword">return</span> (
+    &lt;<span class="tok-fn">SinhalaTypewriter</span>
+      <span class="tok-prop">onChange</span>={(text) =&gt; console.log(text)}
+      <span class="tok-prop">placeholder</span>=<span class="tok-string">'Type "ayubowan"…'</span>
+      <span class="tok-prop">maxSuggestions</span>={<span class="tok-num">5</span>}
+    /&gt;
+  );
+}</pre>
+  </div>
+
+  <div id="tab-controlled" class="code-panel">
+<pre><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
+<span class="tok-keyword">import</span> { SinhalaTypewriter } <span class="tok-keyword">from</span> <span class="tok-string">'@dnsam/sinhala-phonetics'</span>;
+
+<span class="tok-keyword">export default function</span> <span class="tok-fn">Editor</span>() {
+  <span class="tok-keyword">const</span> [text, setText] = useState(<span class="tok-string">''</span>);
+
+  <span class="tok-keyword">return</span> (
+    &lt;&gt;
+      &lt;<span class="tok-fn">SinhalaTypewriter</span>
+        <span class="tok-prop">value</span>={text}
+        <span class="tok-prop">onChange</span>={setText}
+        <span class="tok-prop">onSuggestionSelect</span>={(word) =&gt; console.log(<span class="tok-string">'picked:'</span>, word)}
+        <span class="tok-prop">rows</span>={<span class="tok-num">6</span>}
+      /&gt;
+      &lt;<span class="tok-fn">p</span>&gt;Characters: {text.length}&lt;/<span class="tok-fn">p</span>&gt;
+    &lt;/&gt;
+  );
+}</pre>
+  </div>
+
+  <div id="tab-headless" class="code-panel">
+<pre><span class="tok-comment">// Full control — your CSS, no Tailwind required</span>
+<span class="tok-keyword">import</span> { SinhalaTypewriter } <span class="tok-keyword">from</span> <span class="tok-string">'@dnsam/sinhala-phonetics'</span>;
+
+&lt;<span class="tok-fn">SinhalaTypewriter</span>
+  <span class="tok-prop">unstyled</span>
+  <span class="tok-prop">onChange</span>={setText}
+  <span class="tok-prop">inputClassName</span>=<span class="tok-string">"my-textarea"</span>
+  <span class="tok-prop">suggestionsClassName</span>=<span class="tok-string">"my-dropdown"</span>
+  <span class="tok-prop">suggestionItemClassName</span>=<span class="tok-string">"my-item"</span>
+/&gt;
+
+<span class="tok-comment">// Or build completely custom UI with the hooks:</span>
+<span class="tok-keyword">import</span> { useSinhalaConverter, useWordPrediction } <span class="tok-keyword">from</span> <span class="tok-string">'@dnsam/sinhala-phonetics'</span>;
+
+<span class="tok-keyword">const</span> { sinhalaValue, currentWordSinhala, handlePhoneticChange, replaceCurrentWord }
+  = <span class="tok-fn">useSinhalaConverter</span>();
+
+<span class="tok-keyword">const</span> suggestions = <span class="tok-fn">useWordPrediction</span>(currentWordSinhala, { maxSuggestions: <span class="tok-num">8</span> });</pre>
+  </div>
+
+  <div id="tab-core" class="code-panel">
+<pre><span class="tok-comment">// Works in Node, Deno, browser — no React needed</span>
+<span class="tok-keyword">import</span> { convertText, SinhalaPredictor } <span class="tok-keyword">from</span> <span class="tok-string">'@dnsam/sinhala-phonetics'</span>;
+
+<span class="tok-fn">convertText</span>(<span class="tok-string">'ayubowan'</span>);  <span class="tok-comment">// → 'ආයුබෝවන්'</span>
+<span class="tok-fn">convertText</span>(<span class="tok-string">'mama'</span>);      <span class="tok-comment">// → 'මම'</span>
+<span class="tok-fn">convertText</span>(<span class="tok-string">'kohomada'</span>);  <span class="tok-comment">// → 'කොහොමද'</span>
+
+<span class="tok-comment">// Custom dictionary</span>
+<span class="tok-keyword">const</span> predictor = <span class="tok-keyword">new</span> <span class="tok-fn">SinhalaPredictor</span>([<span class="tok-string">'ගෙදර'</span>, <span class="tok-string">'ගෙල'</span>, <span class="tok-string">'ගෙනාවා'</span>]);
+predictor.<span class="tok-fn">addWords</span>([<span class="tok-string">'අම්මා'</span>, <span class="tok-string">'තාත්තා'</span>]);
+predictor.<span class="tok-fn">predict</span>(<span class="tok-string">'ගෙ'</span>, <span class="tok-num">3</span>);
+<span class="tok-comment">// → [{ word: 'ගෙදර' }, { word: 'ගෙල' }, { word: 'ගෙනාවා' }]</span></pre>
+  </div>
+</section>
+
+<!-- API -->
+<section id="api">
+  <div class="section-label">API Reference</div>
+  <h2>Everything, documented.</h2>
+  <p class="section-desc">Full TypeScript types ship with the package — your editor will autocomplete every prop.</p>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <div class="api-card-name">&lt;SinhalaTypewriter&gt;</div>
+      <div class="api-card-type">React Component</div>
+      <p>All-in-one input with live Sinhala conversion and word prediction dropdown. Accepts controlled or uncontrolled usage.</p>
+      <ul class="prop-list">
+        <li><span class="prop-name">value</span><span class="prop-desc">string — controlled Sinhala value</span></li>
+        <li><span class="prop-name">defaultValue</span><span class="prop-desc">string — uncontrolled initial value</span></li>
+        <li><span class="prop-name">onChange</span><span class="prop-desc">(sinhala: string) → void</span></li>
+        <li><span class="prop-name">onSuggestionSelect</span><span class="prop-desc">(word: string) → void</span></li>
+        <li><span class="prop-name">showSuggestions</span><span class="prop-desc">boolean — default true</span></li>
+        <li><span class="prop-name">maxSuggestions</span><span class="prop-desc">number — default 5</span></li>
+        <li><span class="prop-name">unstyled</span><span class="prop-desc">boolean — strip all styles</span></li>
+        <li><span class="prop-name">rows / placeholder / disabled</span><span class="prop-desc">standard textarea props</span></li>
+      </ul>
+    </div>
+
+    <div class="api-card">
+      <div class="api-card-name">&lt;SinhalaInput&gt;</div>
+      <div class="api-card-type">React Component</div>
+      <p>Textarea with live phonetic conversion only — no suggestion dropdown. Use when you manage predictions yourself.</p>
+      <ul class="prop-list">
+        <li><span class="prop-name">value / defaultValue</span><span class="prop-desc">controlled / uncontrolled</span></li>
+        <li><span class="prop-name">onChange</span><span class="prop-desc">(sinhala: string) → void</span></li>
+        <li><span class="prop-name">onPhoneticChange</span><span class="prop-desc">(raw: string) → void</span></li>
+        <li><span class="prop-name">className / inputClassName</span><span class="prop-desc">style overrides</span></li>
+      </ul>
+    </div>
+
+    <div class="api-card">
+      <div class="api-card-name">useSinhalaConverter</div>
+      <div class="api-card-type">React Hook</div>
+      <p>Manages all phonetic ↔ Sinhala conversion state. Returns everything you need to build a fully custom input.</p>
+      <ul class="prop-list">
+        <li><span class="prop-name">phoneticValue</span><span class="prop-desc">string — raw typed input</span></li>
+        <li><span class="prop-name">sinhalaValue</span><span class="prop-desc">string — converted output</span></li>
+        <li><span class="prop-name">currentWordSinhala</span><span class="prop-desc">string — current word converted</span></li>
+        <li><span class="prop-name">handlePhoneticChange</span><span class="prop-desc">(raw) → void</span></li>
+        <li><span class="prop-name">replaceCurrentWord</span><span class="prop-desc">(word) → void</span></li>
+        <li><span class="prop-name">reset</span><span class="prop-desc">() → void</span></li>
+      </ul>
+    </div>
+
+    <div class="api-card">
+      <div class="api-card-name">convertText / SinhalaPredictor</div>
+      <div class="api-card-type">Core Utilities</div>
+      <p>Framework-agnostic functions. Use in any JavaScript/TypeScript environment.</p>
+      <ul class="prop-list">
+        <li><span class="prop-name">convertText(input)</span><span class="prop-desc">string → string</span></li>
+        <li><span class="prop-name">new SinhalaPredictor(words?)</span><span class="prop-desc">custom dictionary</span></li>
+        <li><span class="prop-name">predictor.predict(prefix, max)</span><span class="prop-desc">→ WordSuggestion[]</span></li>
+        <li><span class="prop-name">predictor.addWords(words)</span><span class="prop-desc">extend dictionary</span></li>
+        <li><span class="prop-name">SINHALA_WORDS</span><span class="prop-desc">string[] — built-in dictionary</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL STEPS -->
+<section id="install">
+  <div class="section-label">Get started</div>
+  <h2>Up and running<br/>in minutes.</h2>
+  <p class="section-desc">Three steps and you have a fully working Sinhala input in your React app.</p>
+
+  <div class="install-steps">
+    <div class="install-step">
+      <div class="step-num">1</div>
+      <h3>Install the package</h3>
+      <pre>npm install @dnsam/sinhala-phonetics</pre>
+    </div>
+    <div class="install-step">
+      <div class="step-num">2</div>
+      <h3>Add Tailwind content path</h3>
+      <pre>// tailwind.config.js
+content: [
+  './node_modules/@dnsam/
+   sinhala-phonetics/dist/**/*.js'
+]</pre>
+    </div>
+    <div class="install-step">
+      <div class="step-num">3</div>
+      <h3>Use the component</h3>
+      <pre>import { SinhalaTypewriter }
+  from '@dnsam/sinhala-phonetics';
+
+&lt;SinhalaTypewriter
+  onChange={setText}
+/&gt;</pre>
+    </div>
+  </div>
+
+  <a href="https://www.npmjs.com/package/@dnsam/sinhala-phonetics" target="_blank" class="btn-primary" style="display:inline-block;">
+    View on npm →
+  </a>
+</section>
+
+<!-- FOOTER -->
+<div class="divider-line"></div>
+<footer>
+  <div class="footer-left">
+    <p style="font-weight:600; color: var(--gray-300); margin-bottom:6px; font-family: var(--mono);">@dnsam/sinhala-phonetics</p>
+    <p>Built with ❤ for the Sinhala-speaking developer community.</p>
+    <p style="margin-top:4px;">MIT License · &copy; 2025 <a href="https://github.com/dnsamw" target="_blank">Dileepa Sam</a></p>
+  </div>
+  <ul class="footer-links">
+    <li><a href="https://github.com/dnsamw/sinhala-phonetics" target="_blank">GitHub</a></li>
+    <li><a href="https://www.npmjs.com/package/@dnsam/sinhala-phonetics" target="_blank">npm</a></li>
+    <li><a href="https://github.com/dnsamw/sinhala-phonetics/issues" target="_blank">Issues</a></li>
+    <li><a href="https://github.com/dnsamw/sinhala-phonetics/blob/main/README.md" target="_blank">Docs</a></li>
+  </ul>
+</footer>
+
+<script>
+  function copyInstall(el) {
+    navigator.clipboard.writeText('npm install @dnsam/sinhala-phonetics').then(() => {
+      const btn = el.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function showTab(name, btn) {
+    document.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.code-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>

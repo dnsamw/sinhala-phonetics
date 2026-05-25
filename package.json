@@ -4,10 +4,17 @@
   "description": "Sinhala phonetic input with word predictions — React components + headless converter",
   "author": "Dileepa Sam",
   "license": "MIT",
-  "keywords": ["sinhala", "phonetics", "react", "input", "unicode", "transliteration"],
+  "keywords": [
+    "sinhala",
+    "phonetics",
+    "react",
+    "input",
+    "unicode",
+    "transliteration"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dnsamw/sinhala-phonetics.git"
+    "url": "git+https://github.com/dnsamw/sinhala-phonetics.git"
   },
   "homepage": "https://dnsamw.github.io/sinhala-phonetics",
   "bugs": {
@@ -23,7 +30,9 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
@@ -33,8 +42,12 @@
     "react-dom": ">=17.0.0"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "react-dom": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
